@@ -8,7 +8,7 @@ using Soneta.CRM.Config;
 using System;
 using System.Linq;
 
-[assembly: Worker(typeof(EmailExceptionWorker), typeof(Kontrahenci))]
+[assembly: Worker(typeof(EmailExceptionWorker))]
 namespace enova365EmailException.Workers
 {
     public class EmailExceptionWorker
