@@ -26,9 +26,9 @@ namespace enova365EmailException.Workers
             _log = new Log("EmailException", true);
             // Inicjalizacja SonetaCfgExtender z wykorzystaniem sesji
             _sonetaCfgExtender = new SonetaCfgExtender(session);
-
             // Pobranie adresu email odbiorcy z konfiguracji
             _receipientEmail = _sonetaCfgExtender.GetValue<string>(Constants.ReceipientEmailNode, string.Empty);
+
             // Pobranie zaznaczonego adresu email z konfiguracji
             var selectedEmailAccount = _sonetaCfgExtender.GetValue<string>(Constants.SelectedEmailNode, string.Empty);
 

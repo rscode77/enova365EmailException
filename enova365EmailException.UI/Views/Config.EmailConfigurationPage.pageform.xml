@@ -2,16 +2,17 @@
 
 <DataForm xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" RightName="Page:EmailConfigurationPage" xmlns="http://www.enova.pl/schema/form.xsd">
   <Page Name="EmailConfigurationPage" CaptionHtml="EmailException/Konfiguracja email" DataContext="{DataSource}">
-	  <Group CaptionHtml="Konfiguracja EmailException" LabelWidth="*">
+	  <Group CaptionHtml="Konfiguracja wysyłki powiadomień o błędach" LabelWidth="*">
 		  <Gap Height="0.2" />
-		  <Label CaptionHtml="Wybierz email z które mają zostać przesyłane wyjątki."/>
-		  <Grid Width="70" Height="7" EditValue="{new EmailConfigurationPage.EmailAddresses}" EditInPlace="true">
+		  <Label CaptionHtml="Wybierz adres e-mail, z którego będą wysyłane powiadomienia o błędach."/>
+		  <Grid Width="52" Height="7" EditValue="{new EmailConfigurationPage.EmailAddresses}" EditInPlace="true">
 			  <Field CaptionHtml="Email" Width="40" Visibility="1" EditValue="{Email}" IsReadOnly="true"/>
 			  <Field CaptionHtml="Wybrany" Width="10" Visibility="1" EditValue="{SelectedEmail}" IsReadOnly="false"/>
 		  </Grid>
+		  <Label CaptionHtml="Jeśli lista jest pusta należy skonfigurować konto pocztowe w aplikacji enova365."/>
 		  <Gap Height="0.2" />
-		  <Label CaptionHtml="Wprowadź email na który mają zostać wysłane wyjątki."/>
-		  <Field CaptionHtml="Email" Width="45" Visibility="1" EditValue="{new EmailConfigurationPage.ReceipientEmail}" IsReadOnly="false"/>
+		  <Label CaptionHtml="Wprowadź adresy e-mail odbiorców powiadomień o błędach (oddzielone średnikiem ';')."/>
+		  <Field CaptionHtml="Email" Width="45" Visibility="1" EditValue="{new EmailConfigurationPage.RecipientEmail}" IsReadOnly="false"/>
 	  </Group>	  
   </Page>
 </DataForm>
