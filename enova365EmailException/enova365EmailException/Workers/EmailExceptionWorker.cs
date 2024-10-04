@@ -60,15 +60,10 @@ namespace enova365EmailException.Workers
             _emailService = new EmailService(_emailConfiguration);
         }
 
-        [Action("Send exception", Icon = ActionIcon.Phone, Mode = ActionMode.SingleSession, Target = ActionTarget.ToolbarWithText)]
-        public void SendEmailException()
+        public void SendEmailException(Exception ex, string exceptionTitle, string additionalMessage)
         {
-            var ex = new Exception("Testowy wyjątek");
-            var exceptionTitle = "Testowy wyjątek";
-            var message = "To jest testowa wiadomość.";
-
             string subject = $"Wystąpił wyjątek: {exceptionTitle}";
-            string body = new HtmlEmailBody().ConstructExceptionEmailBody(ex, message);
+            string body = new HtmlEmailBody().ConstructExceptionEmailBody(ex, additionalMessage);
 
             try
             {
