@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+
+<DataForm xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+          xmlns="http://www.enova.pl/schema/form.xsd"
+          xsi:schemaLocation="http://www.enova.pl/schema/ http://www.enova.pl/schema/form.xsd"
+          RightName="Page:EmailConfigurationPage"
+		  DataType="Soneta.CRM.KontoPocztowe,Soneta.CRM"
+          Priority="100000">
+  <Page Name="EmailConfigurationPage" CaptionHtml="EmailException/Konfiguracja email" DataContext="{DataSource}">
+	  <Group CaptionHtml="Konfiguracja EmailException" LabelWidth="*">
+		  <Gap Height="0.3" />
+		  <Label CaptionHtml="Wybierz email z które mają zostać przesyłane wyjątki."/>
+		  <Grid Width="60" Height="5" EditValue="{new EmailConfigurationPage.EmailAddresses}" EditInPlace="true">
+			  <Field CaptionHtml="Email" Width="35" Visibility="1" EditValue="{Email}" IsReadOnly="true"/>
+			  <Field CaptionHtml="Wybrany" Width="10" Visibility="1" EditValue="{SelectedEmail}" IsReadOnly="false"/>
+		  </Grid>
+		  <Gap Height="0.3" />
+		  <Label CaptionHtml="Wprowadź email na który mają zostać wysłane wyjątki."/>		  
+		  <Field CaptionHtml="Wybrany" Width="60" Visibility="1" EditValue="{RecipientEmail}" IsReadOnly="false"/>
+	  </Group>	  
+  </Page>
+</DataForm>
+
