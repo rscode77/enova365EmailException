@@ -3,10 +3,7 @@ using enova365EmailException.Helpers;
 using enova365EmailException.Services;
 using enova365EmailException.Workers;
 using Soneta.Business;
-using Soneta.CRM;
-using Soneta.CRM.Config;
 using System;
-using System.Linq;
 
 [assembly: Worker(typeof(EmailExceptionWorker))]
 namespace enova365EmailException.Workers
@@ -14,61 +11,31 @@ namespace enova365EmailException.Workers
     public class EmailExceptionWorker
     {
         private readonly EmailService _emailService;
-        private readonly KontoPocztowe _emailConfiguration;
+        private readonly EmailConfigurationService _emailConfigurationService;
+        private readonly ConfigManagerHelper _sonetaCfgExtender;
         private readonly Log _log;
-        private readonly SonetaCfgExtender _sonetaCfgExtender;
-
-        private readonly string _receipientEmail;
 
         public EmailExceptionWorker(Session session)
         {
             // Inicjalizacja obiektu Log
             _log = new Log("EmailException", true);
-            // Inicjalizacja SonetaCfgExtender z wykorzystaniem sesji
-            _sonetaCfgExtender = new SonetaCfgExtender(session);
-            // Pobranie adresu email odbiorcy z konfiguracji
-            _receipientEmail = _sonetaCfgExtender.GetValue<string>(Constants.ReceipientEmailNode, string.Empty);
-
-            // Pobranie zaznaczonego adresu email z konfiguracji
-            var selectedEmailAccount = _sonetaCfgExtender.GetValue<string>(Constants.SelectedEmailNode, string.Empty);
-
-            // Sprawdzenie, czy wybrano konto pocztowe
-            if (string.IsNullOrEmpty(selectedEmailAccount))
-            {
-                LogError("Nie wybrano konta pocztowego będącego adresatem wiadomości.");
-                return;
-            }
-
-            // Sprawdzenie, czy podano adres email odbiorcy
-            if (string.IsNullOrEmpty(_receipientEmail))
-            {
-                LogError("Nie podano adresu email odbiorcy.");
-                return;
-            }
-
-            // Pobranie konfiguracji konta email na podstawie nazwy konta
-            _emailConfiguration = session.GetCRM().KontaPocztowe
-                .OfType<KontoPocztowe>().FirstOrDefault(x => x.Nazwa == selectedEmailAccount);
-
-            // Sprawdzenie, czy odnaleziono konfigurację konta email
-            if (_emailConfiguration == null)
-            {
-                LogError("Nie odnaleziono konfiguracji konta email nadawcy.");
-            }
-
+            // Inicjalizacja SonetaCfgExtender
+            _sonetaCfgExtender = new ConfigManagerHelper(session);
+            // Inicjalizacja email configuration
+            _emailConfigurationService = new EmailConfigurationService(session, _sonetaCfgExtender, _log);
             // Inicjalizacja usługi EmailService
-            _emailService = new EmailService(_emailConfiguration);
+            _emailService = new EmailService(_emailConfigurationService.GetEmailConfiguration());
         }
 
         public void SendEmailException(Exception ex, string exceptionTitle, string additionalMessage)
         {
             string subject = $"Wystąpił wyjątek: {exceptionTitle}";
-            string body = new HtmlEmailBody().ConstructExceptionEmailBody(ex, additionalMessage);
+            string body = new EmailBody().ConstructExceptionEmailBody(ex, additionalMessage);
 
             try
             {
                 // Rozdzielenie adresów email odbiorcy
-                var emailList = _receipientEmail.Split(';');
+                var emailList = _emailConfigurationService.GetRecipientAddress().Split(';');
 
                 foreach (var email in emailList)
                 {
@@ -83,14 +50,8 @@ namespace enova365EmailException.Workers
             catch (Exception e)
             {
                 // Logowanie błędu w przypadku niepowodzenia wysyłki email
-                LogError($"Wystąpił błąd podczas wysyłania EmailException: {e.Message}");
+                _log.WriteLine($"Wystąpił błąd podczas wysyłania EmailException: {e.Message}");
             }
-        }
-
-        // Metoda do logowania błędów
-        public void LogError(string errorMessage)
-        {
-            _log.WriteLine(errorMessage);
         }
     }
 }

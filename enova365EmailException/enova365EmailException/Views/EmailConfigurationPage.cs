@@ -15,11 +15,11 @@ namespace enova365EmailException.Views
     internal class EmailConfigurationPage
     {
         private readonly Session _session;
-        private readonly SonetaCfgExtender _sonetaCfgExtender;
+        private readonly ConfigManagerHelper _sonetaCfgExtender;
         public EmailConfigurationPage(Session session)
         {
             _session = session;
-            _sonetaCfgExtender = new SonetaCfgExtender(_session);
+            _sonetaCfgExtender = new ConfigManagerHelper(_session);
         }
 
         // Właściwość zwracająca listę dostępnych adresów email

@@ -4,12 +4,12 @@ using Soneta.Config;
 
 namespace enova365EmailException.Helpers
 {
-    internal class SonetaCfgExtender
+    internal class ConfigManagerHelper
     {
         private readonly Session _session;
 
         // Konstruktor klasy SonetaCfgExtender, który przyjmuje sesję jako zależność
-        public SonetaCfgExtender(Session session)
+        public ConfigManagerHelper(Session session)
         {
             _session = session;
         }

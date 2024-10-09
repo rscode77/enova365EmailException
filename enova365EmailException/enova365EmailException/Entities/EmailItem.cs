@@ -6,11 +6,11 @@ namespace enova365EmailException.Entities
 {
     internal class EmailItem
     {
-        private readonly SonetaCfgExtender _sonetaCfgExtender;
+        private readonly ConfigManagerHelper _sonetaCfgExtender;
         public string Email { get; }
 
         // Konstruktor klasy EmailItem, wykorzystujący Dependency Injection dla SonetaCfgExtender
-        public EmailItem(SonetaCfgExtender sonetaCfgExtender, string email)
+        public EmailItem(ConfigManagerHelper sonetaCfgExtender, string email)
         {
             _sonetaCfgExtender = sonetaCfgExtender;
             Email = email;

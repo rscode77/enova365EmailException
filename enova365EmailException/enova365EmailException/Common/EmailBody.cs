@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace enova365EmailException.Helpers
+namespace enova365EmailException.Common
 {
-    internal class HtmlEmailBody
+    internal class EmailBody
     {
         // Metoda tworząca treść emaila w przypadku wystąpienia wyjątku
         public string ConstructExceptionEmailBody(Exception ex, string additionalMessage)
