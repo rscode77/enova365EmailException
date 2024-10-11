@@ -2,6 +2,7 @@
 using enova365EmailException.Helpers;
 using enova365EmailException.Services;
 using enova365EmailException.Workers;
+using Microsoft.Extensions.DependencyInjection;
 using Soneta.Business;
 using System;
 
@@ -10,21 +11,34 @@ namespace enova365EmailException.Workers
 {
     public class EmailExceptionWorker
     {
-        private readonly EmailService _emailService;
-        private readonly EmailConfigurationService _emailConfigurationService;
-        private readonly ConfigManagerHelper _sonetaCfgExtender;
         private readonly Log _log;
+        private readonly ConfigManagerHelper _sonfigManagerHelper;
+        private readonly EmailConfigurationService _emailConfigurationService;
+        private readonly EmailService _emailService;
 
         public EmailExceptionWorker(Session session)
         {
-            // Inicjalizacja obiektu Log
-            _log = new Log("EmailException", true);
-            // Inicjalizacja SonetaCfgExtender
-            _sonetaCfgExtender = new ConfigManagerHelper(session);
-            // Inicjalizacja email configuration
-            _emailConfigurationService = new EmailConfigurationService(session, _sonetaCfgExtender, _log);
-            // Inicjalizacja usługi EmailService
-            _emailService = new EmailService(_emailConfigurationService.GetEmailConfiguration());
+            var services = new ServiceCollection();
+            services.AddSingleton<Log>(provider => new Log("EmailException", true));
+            services.AddTransient<ConfigManagerHelper>(provider => new ConfigManagerHelper(session));
+            services.AddTransient<EmailConfigurationService>(provider =>
+            {
+                var log = provider.GetRequiredService<Log>();
+                var configManagerHelper = provider.GetRequiredService<ConfigManagerHelper>();
+                return new EmailConfigurationService(session, configManagerHelper, log);
+            });
+            services.AddTransient<EmailService>(provider =>
+            {
+                var emailConfigurationService = provider.GetRequiredService<EmailConfigurationService>();
+                var emailConfiguration = emailConfigurationService.GetEmailConfiguration();
+                return new EmailService(emailConfiguration);
+            });
+
+            var serviceProvider = services.BuildServiceProvider();
+            _log = serviceProvider.GetRequiredService<Log>();
+            _sonfigManagerHelper = serviceProvider.GetRequiredService<ConfigManagerHelper>();
+            _emailConfigurationService = serviceProvider.GetRequiredService<EmailConfigurationService>();
+            _emailService = serviceProvider.GetRequiredService<EmailService>();
         }
 
         public void SendEmailException(Exception ex, string exceptionTitle, string additionalMessage)
