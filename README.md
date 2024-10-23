@@ -1,5 +1,8 @@
 <h2>enova365EmailException</h2>
 
+> [!NOTE]
+> Rozszerzenie zostało stworzone w celach edukacyjnych.
+
 <h3>Opis</h3>
 
 <b>enova365EmailException</b> to dodatek do systemu ERP enova365, który umożliwia automatyczne wysyłanie wiadomości e-mail zawierających szczegółowe informacje o wyjątkach (błędach) występujących w systemie. Dzięki temu administratorzy i deweloperzy mogą być natychmiast powiadamiani o problemach, co pozwala na szybką reakcję i minimalizację potencjalnych przestojów lub błędów w działaniu aplikacji.
